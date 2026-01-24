@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FRAMEORY | Premium Photo Frames</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+html,body{overflow-x:hidden;}
+:root{
+  --brown:#5a3e2b;
+  --light-brown:#8b5e3c;
+  --cream:#f5efe6;
+}
+body{background:var(--cream);color:#2c1c12;}
+
+header{
+  background:var(--brown);
+  color:white;
+  padding:15px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+header h1{letter-spacing:2px}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.header-right input{
+  padding:10px 16px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+  width:220px;
+}
+.cart-btn{
+  position:relative;
+  background:var(--light-brown);
+  border:none;
+  color:white;
+  padding:10px 22px;
+  border-radius:25px;
+  cursor:pointer;
+}
+.cart-count{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  background:#ff3b3b;
+  color:white;
+  border-radius:50%;
+  padding:2px 7px;
+  font-size:12px;
+}
+
+.hero{
+  min-height:85vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  background:linear-gradient(120deg,#6b4226,#3e2617);
+  color:white;
+  padding:20px;
+}
+.hero h2{font-size:clamp(2rem,5vw,3rem)}
+.hero p{margin:15px 0;color:#f0e6dc}
+.hero a{
+  background:#d4b59a;
+  color:#3e2617;
+  padding:14px 32px;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:500;
+}
+
+.products{
+  padding:60px 40px;
+  display:grid;
+  gap:30px;
+  grid-template-columns:repeat(4,1fr);
+}
+@media(max-width:1024px){
+  .products{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:600px){
+  .products{
+    grid-template-columns:repeat(2,1fr);
+    padding:40px 20px;
+  }
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  padding:15px;
+  cursor:pointer;
+}
+.card:hover{transform:translateY(-6px);}
+.card img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:15px;
+  margin-bottom:15px;
+}
+.card h3{margin-bottom:5px;}
+.card p{margin-bottom:10px;}
+.card button{
+  padding:12px;
+  border:none;
+  border-radius:25px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
+  margin-bottom:6px;
+}
+.card button:hover{background:var(--light-brown);}
+
+.cart{
+  margin:40px;
+  padding:40px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.qty-box{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.qty-box button{
+  padding:4px 10px;
+  border:none;
+  border-radius:10px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
+  font-size:12px;
+}
+.remove-btn{background:#b33a3a;}
+
+.checkout-btn{
+  margin-top:15px;
+  padding:14px 30px;
+  border:none;
+  border-radius:30px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
+}
+.checkout-btn:hover{background:var(--light-brown);}
+
+footer{background:var(--brown);color:#e8dccc;text-align:center;padding:25px;}
+#popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-50px);background:#d4b59a;color:#3e2617;padding:15px 30px;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,0.2);opacity:0;pointer-events:none;transition:transform 0.5s ease, opacity 0.5s ease;font-weight:500;z-index:9999;}
+#popup.show{transform:translateX(-50%) translateY(0);opacity:1;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>FRAMEORY</h1>
+  <div class="header-right">
+    <input type="text" id="search" placeholder="Search frames..." onkeyup="searchProducts(event)">
+    <button class="cart-btn" onclick="scrollToCart()">
+      Cart 🛒 <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <h2>Frame Your Moments Beautifully</h2>
+  <p>Elegant handcrafted photo frames for timeless memories</p>
+  <a href="#shop">Explore Collection</a>
+</section>
+
+<section class="products" id="shop"></section>
+
+<section class="cart" id="cart">
+  <h2>Your Cart</h2>
+  <div id="cartItems"></div>
+  <p><strong>Total: ₹<span id="total">0</span></strong></p>
+  <button class="checkout-btn" onclick="checkoutCart()">Checkout</button>
+</section>
+
+<footer>© 2026 FRAMEORY — Crafted With Elegance 🤎</footer>
+
+<div id="popup"></div>
+
+<script>
+// ---------------- Product List ----------------
+const products = [
+  {id:"classic-wooden-frame",name:"Classic Wooden Frame",price:400,img:"https://images.unsplash.com/photo-1589998059171-988d887df646"},
+  {id:"dark-walnut-frame",name:"Dark Walnut Frame",price:550,img:"https://images.unsplash.com/photo-1618221195710-dd6b41faaea6"},
+  {id:"luxury-vintage-frame",name:"Luxury Vintage Frame",price:750,img:"https://images.unsplash.com/photo-1523413651479-597eb2da0ad6"},
+  {id:"modern-minimal-frame",name:"Modern Minimal Frame",price:500,img:"https://images.unsplash.com/photo-1524758631624-e2822e304c36"}
+];
+
+// Render products
+function renderProducts(list){
+  const box = document.getElementById("shop");
+  box.innerHTML = "";
+  list.forEach(p=>{
+    box.innerHTML += `
+    <div class="card" onclick="openProduct('${p.id}')">
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p>₹${p.price}</p>
+      <button onclick="event.stopPropagation(); addToCart('${p.name}',${p.price})">Add to Cart</button>
+      <button onclick="event.stopPropagation(); buyNow('${p.name}',${p.price})">Buy Now</button>
+    </div>
+    `;
+  });
+}
+renderProducts(products);
+
+// ---------------- Cart Functions ----------------
+let cart = JSON.parse(localStorage.getItem("cart")||"[]");
+
+function saveCart(){ localStorage.setItem("cart",JSON.stringify(cart)); }
+
+function updateCartCount(){
+  document.getElementById("cartCount").innerText = cart.reduce((sum,i)=>sum+i.qty,0);
+}
+
+function renderCart(){
+  const box = document.getElementById("cartItems");
+  box.innerHTML = "";
+  let total=0;
+  cart.forEach((i,idx)=>{
+    total += i.price*i.qty;
+    box.innerHTML += `
+      <div class="cart-item">
+        <span>${i.name}</span>
+        <div class="qty-box">
+          <button onclick="changeQty(${idx},-1)">−</button>
+          <span>${i.qty}</span>
+          <button onclick="changeQty(${idx},1)">+</button>
+          <button class="remove-btn" onclick="removeItem(${idx})">Remove</button>
+        </div>
+        <span>₹${i.price*i.qty}</span>
+      </div>
+    `;
+  });
+  document.getElementById("total").innerText = total;
+}
+
+function addToCart(name, price){
+  let item = cart.find(i=>i.name===name);
+  if(item){item.qty++}else{cart.push({name,price,qty:1})}
+  saveCart();
+  renderCart();
+  updateCartCount();
+  showPopup("Added to Cart 🛒");
+}
+
+function buyNow(name, price){
+  addToCart(name, price);
+  showPopup("Proceeding to payment 💳");
+}
+
+function changeQty(idx, delta){
+  cart[idx].qty += delta;
+  if(cart[idx].qty<=0) cart.splice(idx,1);
+  saveCart(); renderCart(); updateCartCount();
+}
+
+function removeItem(idx){
+  cart.splice(idx,1);
+  saveCart(); renderCart(); updateCartCount();
+}
+
+function checkoutCart(){
+  if(cart.length===0){showPopup("Cart is empty ❌"); return;}
+  showPopup("Checkout not implemented 💳");
+}
+
+// ---------------- Search ----------------
+function searchProducts(e){
+  let val = document.getElementById("search").value.toLowerCase();
+  let filtered = products.filter(p=>p.name.toLowerCase().includes(val));
+  renderProducts(filtered);
+  if(e && e.key==="Enter") document.getElementById("shop").scrollIntoView({behavior:"smooth"});
+}
+
+// ---------------- Open product page ----------------
+function openProduct(id){
+  window.location.href = "product.html?product="+id;
+}
+
+// ---------------- Popup ----------------
+function showPopup(msg){
+  const popup=document.getElementById("popup");
+  popup.textContent = msg;
+  popup.classList.add("show");
+  setTimeout(()=>popup.classList.remove("show"),2000);
+}
+
+// ---------------- Init ----------------
+renderCart();
+updateCartCount();
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Product Details | FRAMEORY</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Poppins;background:#f5efe6}
+.container{max-width:1100px;margin:auto;padding:40px}
+.back{display:inline-block;margin-bottom:20px;color:#5a3e2b;text-decoration:none;font-weight:500;cursor:pointer}
+.product{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.main-img{width:100%;border-radius:20px}
+.thumbs{display:flex;gap:10px;margin-top:10px}
+.thumbs img{width:70px;height:70px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid transparent}
+.thumbs img.active{border-color:#5a3e2b}
+h1{margin:0}
+.price{font-size:1.4rem;margin:10px 0}
+button{
+  padding:12px 28px;
+  border:none;
+  border-radius:25px;
+  background:#5a3e2b;
+  color:white;
+  cursor:pointer;
+  margin-right:10px;
+  margin-bottom:10px;
+}
+button:hover{background:#8b5e3c}
+.review{background:white;padding:15px;border-radius:12px;margin-top:15px}
+#popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-50px);background:#d4b59a;color:#3e2617;padding:15px 30px;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,0.2);opacity:0;pointer-events:none;transition:transform 0.5s ease, opacity 0.5s ease;font-weight:500;z-index:9999;}
+#popup.show{transform:translateX(-50%) translateY(0);opacity:1;}
+@media(max-width:768px){
+  .product{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- GitHub-ready back button -->
+  <a href="index.html" class="back">← Back to Shop</a>
+  <div class="product" id="productBox"></div>
+</div>
+
+<div id="popup"></div>
+
+<script>
+// ---------------- Product Database ----------------
+const products = {
+  "classic-wooden-frame":{
+    name:"Classic Wooden Frame", price:400,
+    images:["https://images.unsplash.com/photo-1589998059171-988d887df646","https://images.unsplash.com/photo-1524758631624-e2822e304c36","https://images.unsplash.com/photo-1523413651479-597eb2da0ad6"],
+    desc:"Handcrafted wooden frame with elegant finish. Perfect for your memories.",
+    reviews:["⭐️⭐️⭐️⭐️⭐️ Beautiful quality!","⭐️⭐️⭐️⭐️ Looks premium."]
+  },
+  "dark-walnut-frame":{
+    name:"Dark Walnut Frame", price:550,
+    images:["https://images.unsplash.com/photo-1618221195710-dd6b41faaea6","https://images.unsplash.com/photo-1519710164239-da123dc03ef4","https://images.unsplash.com/photo-1524758631624-e2822e304c36"],
+    desc:"Rich walnut texture for modern & luxury interiors.",
+    reviews:["⭐️⭐️⭐️⭐️ Classy look!"]
+  },
+  "luxury-vintage-frame":{
+    name:"Luxury Vintage Frame", price:750,
+    images:["https://images.unsplash.com/photo-1523413651479-597eb2da0ad6","https://images.unsplash.com/photo-1519710164239-da123dc03ef4"],
+    desc:"Elegant vintage style frame that adds a luxury touch to any room.",
+    reviews:["⭐️⭐️⭐️⭐️⭐️ Absolutely love it!","⭐️⭐️⭐️⭐️ High quality and finish."]
+  },
+  "modern-minimal-frame":{
+    name:"Modern Minimal Frame", price:500,
+    images:["https://images.unsplash.com/photo-1524758631624-e2822e304c36","https://images.unsplash.com/photo-1589998059171-988d887df646"],
+    desc:"Sleek minimal design frame for contemporary interiors.",
+    reviews:["⭐️⭐️⭐️⭐️ Clean and simple design!"]
+  }
+};
+
+// ---------------- Load Product ----------------
+const params = new URLSearchParams(window.location.search);
+const id = params.get("product");
+const p = products[id];
+
+if(!p){ document.getElementById("productBox").innerHTML="<p>Product not found!</p>"; }
+
+// Render product
+let gallery = p.images.map((img,i)=>`<img src="${img}" class="${i===0?'active':''}" onclick="setMain(this)">`).join("");
+document.getElementById("productBox").innerHTML = `
+  <div>
+    <img src="${p.images[0]}" class="main-img" id="mainImg">
+    <div class="thumbs">${gallery}</div>
+  </div>
+  <div>
+    <h1>${p.name}</h1>
+    <p class="price">₹${p.price}</p>
+    <p>${p.desc}</p>
+    <button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
+    <button onclick="buyNow('${p.name}',${p.price})">Buy Now</button>
+    <h3>Reviews</h3>
+    ${p.reviews.map(r=>`<div class="review">${r}</div>`).join("")}
+  </div>
+`;
+
+// ---------------- Functions ----------------
+function setMain(img){
+  document.getElementById("mainImg").src = img.src;
+  document.querySelectorAll(".thumbs img").forEach(i=>i.classList.remove("active"));
+  img.classList.add("active");
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")||"[]");
+function saveCart(){ localStorage.setItem("cart",JSON.stringify(cart)); }
+
+function showPopup(message){
+  const popup=document.getElementById("popup");
+  popup.textContent = message;
+  popup.classList.add("show");
+  setTimeout(()=>popup.classList.remove("show"),2000);
+}
+
+function addToCart(name, price){
+  let item = cart.find(i=>i.name===name);
+  if(item){item.qty++}else{cart.push({name,price,qty:1})}
+  saveCart();
+  showPopup("Added to Cart 🛒");
+}
+
+function buyNow(name, price){
+  addToCart(name, price);
+  showPopup("Proceeding to payment 💳");
+}
+</script>
+
+</body>
+</html>
