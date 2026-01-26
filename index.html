@@ -2,90 +2,259 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FRAMEORY</title>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FRAMEORY | Premium Photo Frames</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-:root{--brown:#5a3e2b;--light:#8b5e3c;--cream:#f5efe6;}
-body{background:var(--cream);color:#2c1c12}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+html,body{overflow-x:hidden;scroll-behavior:smooth;}
+:root{
+  --brown:#5a3e2b;
+  --light-brown:#8b5e3c;
+  --cream:#f5efe6;
+}
+body{background:var(--cream);color:#2c1c12;}
 
-header{background:var(--brown);color:white;padding:15px 30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-header h1{letter-spacing:2px}
+/* Header */
+header{
+  background:var(--brown);
+  color:white;
+  padding:15px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+}
+header h1{letter-spacing:2px;}
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  position:relative;
+}
+.header-right input{
+  padding:10px 16px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+  width:220px;
+}
 
-.header-right{display:flex;gap:10px;align-items:center}
-.header-right input{padding:10px 15px;border-radius:25px;border:none;width:220px}
-.cart-btn{background:var(--light);color:white;border:none;padding:10px 20px;border-radius:25px;cursor:pointer}
+/* Search Suggestions */
+.search-suggestions{
+  position:absolute;
+  top:48px;
+  left:0;
+  right:0;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.15);
+  overflow:hidden;
+  z-index:999;
+  display:none;
+}
+.search-suggestions div{
+  padding:10px 16px;
+  cursor:pointer;
+}
+.search-suggestions div:hover{
+  background:#f2e6d8;
+}
 
-/* HERO */
+.cart-btn{
+  position:relative;
+  background:var(--light-brown);
+  border:none;
+  color:white;
+  padding:10px 22px;
+  border-radius:25px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.cart-count{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  background:#ff3b3b;
+  color:white;
+  border-radius:50%;
+  padding:2px 7px;
+  font-size:12px;
+}
+
+/* Hero with Image */
 .hero{
-  min-height:85vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
-  text-align:center;color:white;padding:20px;
-  background:url("banner.jpg") center/cover no-repeat;position:relative;
+  min-height:85vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:white;
+  padding:20px;
+  background:url("banner.jpg") center/cover no-repeat;
+  position:relative;
 }
-.hero::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,0.45)}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+}
 .hero *{position:relative;z-index:2}
-.hero h2{font-size:3rem}
-.hero p{margin:15px 0}
-.hero a{background:#d4b59a;color:#3e2617;padding:14px 30px;border-radius:30px;text-decoration:none}
-
-/* PRODUCTS GRID */
-.products{padding:60px 40px;display:grid;gap:25px;grid-template-columns:repeat(4,1fr)}
-@media(max-width:1024px){.products{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){
-  .header-right{width:100%;justify-content:center;margin-top:10px}
-  .header-right input{width:65%}
-  .products{grid-template-columns:repeat(2,1fr);gap:12px;padding:25px 12px}
+.hero h2{font-size:clamp(2rem,5vw,3rem);}
+.hero p{margin:15px 0;color:#f0e6dc;}
+.hero a{
+  background:#d4b59a;
+  color:#3e2617;
+  padding:14px 32px;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:500;
 }
 
+/* Products */
+.products{
+  padding:60px 40px;
+  display:grid;
+  gap:20px;
+  grid-template-columns:repeat(4,1fr);
+}
 .card{
-  background:white;border-radius:20px;box-shadow:0 8px 20px rgba(0,0,0,0.12);
-  padding:12px;display:flex;flex-direction:column
+  background:white;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+  transition:0.3s;
+  display:flex;
+  flex-direction:column;
+  padding:15px;
+  cursor:pointer;
 }
-.card img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px}
-.card h3{margin:8px 0 4px}
-.card p{margin-bottom:10px}
-.card .btns{display:flex;gap:8px}
+.card:hover{transform:translateY(-6px);}
+.card img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:15px;
+  margin-bottom:15px;
+}
+.card h3{margin-bottom:5px;}
+.card p{margin-bottom:10px;}
 .card button{
-  flex:1;padding:10px;border:none;border-radius:25px;
-  background:var(--brown);color:white;cursor:pointer
+  padding:12px;
+  border:none;
+  border-radius:25px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
+  margin-bottom:6px;
 }
+.card button:hover{background:var(--light-brown);}
 
-/* CART */
+/* Cart */
 .cart{
-  margin:50px auto;padding:40px;max-width:1000px;background:white;
-  border-radius:20px;box-shadow:0 12px 35px rgba(0,0,0,0.15)
+  margin:40px auto;
+  padding:40px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  max-width:1000px;
 }
-.cart h2{margin-bottom:15px}
-.cart-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.cart-item span{flex:1}
-.cart-item button{
-  background:#b33;color:white;border:none;padding:6px 12px;border-radius:15px;cursor:pointer
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+  flex-wrap:wrap;
 }
-.cart input{padding:10px;width:220px;border-radius:20px;border:1px solid #ccc}
-.cart button.checkout{
-  background:var(--brown);color:white;border:none;padding:12px 25px;border-radius:25px;margin-top:15px;cursor:pointer
+.qty-box{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:10px;
 }
-.total{margin-top:15px;font-size:1.2rem}
+.qty-box button{
+  padding:4px 10px;
+  border:none;
+  border-radius:10px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
+  font-size:12px;
+}
+.remove-btn{background:#b33a3a;}
+.checkout-btn{
+  margin-top:20px;
+  padding:14px 30px;
+  border:none;
+  border-radius:30px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
+}
+.checkout-btn:hover{background:var(--light-brown);}
 
-/* POPUP */
-#popup{
-  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-30px);
-  background:#d4b59a;color:#3e2617;padding:12px 25px;border-radius:20px;
-  opacity:0;transition:0.4s;z-index:999;white-space:nowrap
+/* Coupon */
+.coupon-box{
+  margin-top:20px;
+  display:flex;
+  gap:10px;
 }
-#popup.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.coupon-box input{
+  flex:1;
+  padding:12px 16px;
+  border-radius:25px;
+  border:1px solid #ccc;
+  outline:none;
+}
+.apply-btn{
+  padding:12px 26px;
+  border:none;
+  border-radius:25px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
+}
+.apply-btn:hover{background:var(--light-brown);}
+
+/* Footer */
+footer{background:var(--brown);color:#e8dccc;text-align:center;padding:25px;}
+
+/* Popup */
+#popup{
+  position:fixed;top:20px;left:50%;
+  transform:translateX(-50%) translateY(-50px);
+  background:#d4b59a;color:#3e2617;
+  padding:10px 20px;border-radius:20px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.2);
+  opacity:0;pointer-events:none;
+  transition:transform 0.5s ease, opacity 0.5s ease;font-weight:500;z-index:9999;
+  white-space:nowrap;text-align:center;
+}
+#popup.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* MOBILE */
+@media(max-width:1024px){.products{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:600px){
+  .products{grid-template-columns:repeat(2,1fr);padding:15px 10px;gap:10px;}
+  header{flex-direction:column;align-items:center;}
+  .header-right{width:100%;justify-content:center;margin-top:10px;}
+  .header-right input{width:60%;}
+  .cart-btn{margin-left:10px;}
+}
 </style>
 </head>
-
 <body>
 
 <header>
   <h1>FRAMEORY</h1>
   <div class="header-right">
-    <input id="search" placeholder="Search frames..." onkeydown="if(event.key==='Enter'){document.getElementById('shop').scrollIntoView({behavior:'smooth'})}">
-    <button class="cart-btn" onclick="scrollToCart()">Cart 🛒</button>
+    <input type="text" id="search" placeholder="Search frames..." onkeyup="searchProducts(event)">
+    <div class="search-suggestions" id="suggestions"></div>
+    <button class="cart-btn" onclick="scrollToCart()">
+      Cart 🛒 <span class="cart-count" id="cartCount">0</span>
+    </button>
   </div>
 </header>
 
@@ -95,91 +264,145 @@ header h1{letter-spacing:2px}
   <a href="#shop">Explore Collection</a>
 </section>
 
-<section class="products" id="shop">
-  <div class="card">
-    <img src="https://i.postimg.cc/abcdefg/frame1.jpg">
-    <h3>Classic Frame</h3><p>₹400</p>
-    <div class="btns">
-      <button onclick="addToCart('Classic Frame',400)">Add</button>
-      <button onclick="buyNow('Classic Frame',400)">Buy</button>
-    </div>
-  </div>
-  <div class="card">
-    <img src="https://i.postimg.cc/abcdefg/frame2.jpg">
-    <h3>Walnut Frame</h3><p>₹550</p>
-    <div class="btns">
-      <button onclick="addToCart('Walnut Frame',550)">Add</button>
-      <button onclick="buyNow('Walnut Frame',550)">Buy</button>
-    </div>
-  </div>
-  <div class="card">
-    <img src="https://i.postimg.cc/abcdefg/frame3.jpg">
-    <h3>Vintage Frame</h3><p>₹750</p>
-    <div class="btns">
-      <button onclick="addToCart('Vintage Frame',750)">Add</button>
-      <button onclick="buyNow('Vintage Frame',750)">Buy</button>
-    </div>
-  </div>
-  <div class="card">
-    <img src="https://i.postimg.cc/abcdefg/frame4.jpg">
-    <h3>Modern Frame</h3><p>₹500</p>
-    <div class="btns">
-      <button onclick="addToCart('Modern Frame',500)">Add</button>
-      <button onclick="buyNow('Modern Frame',500)">Buy</button>
-    </div>
-  </div>
-</section>
+<section class="products" id="shop"></section>
 
 <section class="cart" id="cart">
   <h2>Your Cart</h2>
   <div id="cartItems"></div>
-  <input id="coupon" placeholder="Coupon: FRAMEORY10">
-  <button onclick="applyCoupon()">Apply</button>
-  <p class="total">Total: ₹<span id="total">0</span></p>
-  <button class="checkout" onclick="checkoutCart()">Checkout</button>
+
+  <div class="coupon-box">
+    <input type="text" id="coupon" placeholder="Coupon Code (FRAMEORY10)">
+    <button class="apply-btn" onclick="applyCoupon()">Apply</button>
+  </div>
+
+  <p><strong>Total: ₹<span id="total">0</span></strong></p>
+  <button class="checkout-btn" onclick="checkoutCart()">Checkout</button>
 </section>
 
-<div id="popup">Popup</div>
+<footer>© 2026 FRAMEORY — Crafted With Elegance 🤎</footer>
+
+<div id="popup"></div>
 
 <script>
-let cart=[],total=0,discount=false;
-
-function addToCart(n,p){
-  cart.push({n,p});total+=p;render();popup("Added to cart ✔");
-}
-
-function removeItem(i){
-  total-=cart[i].p;cart.splice(i,1);render();
-}
-
-function render(){
-  let box=document.getElementById("cartItems");box.innerHTML="";
-  cart.forEach((i,idx)=>{
-    box.innerHTML+=`<div class="cart-item">
-      <span>${i.n}</span><span>₹${i.p}</span>
-      <button onclick="removeItem(${idx})">Remove</button>
-    </div>`;
+// ---------------- Products ----------------
+const products=[
+  {id:"classic-wooden-frame",name:"Classic Wooden Frame",price:400,img:"https://images.unsplash.com/photo-1589998059171-988d887df646"},
+  {id:"dark-walnut-frame",name:"Dark Walnut Frame",price:550,img:"https://images.unsplash.com/photo-1618221195710-dd6b41faaea6"},
+  {id:"luxury-vintage-frame",name:"Luxury Vintage Frame",price:750,img:"https://images.unsplash.com/photo-1523413651479-597eb2da0ad6"},
+  {id:"modern-minimal-frame",name:"Modern Minimal Frame",price:500,img:"https://images.unsplash.com/photo-1524758631624-e2822e304c36"}
+];
+function renderProducts(list){
+  const box=document.getElementById("shop"); box.innerHTML="";
+  list.forEach(p=>{
+    box.innerHTML += `
+      <div class="card" onclick="openProduct('${p.id}')">
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>₹${p.price}</p>
+        <button onclick="event.stopPropagation(); addToCart('${p.name}',${p.price})">Add to Cart</button>
+        <button onclick="event.stopPropagation(); buyNow('${p.name}',${p.price})">Buy Now</button>
+      </div>
+    `;
   });
-  document.getElementById("total").innerText=total.toFixed(2);
+}
+renderProducts(products);
+
+// ---------------- Cart ----------------
+let cart=JSON.parse(localStorage.getItem("cart")||"[]");
+let discountUsed=false;
+function saveCart(){localStorage.setItem("cart",JSON.stringify(cart));}
+function updateCartCount(){document.getElementById("cartCount").innerText = cart.reduce((sum,i)=>sum+i.qty,0);}
+function renderCart(){
+  const box=document.getElementById("cartItems"); box.innerHTML="";
+  let total=0;
+  cart.forEach((i,idx)=>{
+    total+=i.price*i.qty;
+    box.innerHTML+=`
+      <div class="cart-item">
+        <span>${i.name}</span>
+        <div class="qty-box">
+          <button onclick="changeQty(${idx},-1)">−</button>
+          <span>${i.qty}</span>
+          <button onclick="changeQty(${idx},1)">+</button>
+          <button class="remove-btn" onclick="removeItem(${idx})">Remove</button>
+        </div>
+        <span>₹${i.price*i.qty}</span>
+      </div>
+    `;
+  });
+  document.getElementById("total").innerText=total;
 }
 
-function popup(msg){
-  let p=document.getElementById("popup");p.textContent=msg;p.classList.add("show");
-  setTimeout(()=>p.classList.remove("show"),1800);
+function addToCart(name,price){
+  let item=cart.find(i=>i.name===name);
+  if(item){item.qty++}else{cart.push({name,price,qty:1})}
+  saveCart(); renderCart(); updateCartCount(); showPopup("Added to Cart 🛒");
 }
+function buyNow(name,price){addToCart(name,price); showPopup("Proceeding to payment 💳");}
+function changeQty(idx,delta){cart[idx].qty+=delta;if(cart[idx].qty<=0) cart.splice(idx,1); saveCart(); renderCart(); updateCartCount();}
+function removeItem(idx){cart.splice(idx,1); saveCart(); renderCart(); updateCartCount();}
+function checkoutCart(){if(cart.length===0){showPopup("Cart is empty ❌"); return;} showPopup("Checkout not implemented 💳");}
 
+// ---------------- Coupon ----------------
 function applyCoupon(){
-  let c=document.getElementById("coupon").value.trim();
-  if(c==="FRAMEORY10"&&!discount){total*=0.9;discount=true;render();popup("Coupon Applied 🎉")}
-  else popup("Invalid / Used ❌");
+  let code=document.getElementById("coupon").value.trim();
+  if(code==="FRAMEORY10" && !discountUsed){
+    cart.forEach(i=>i.price=i.price*0.9);
+    discountUsed=true;
+    saveCart(); renderCart(); showPopup("Coupon Applied 🎉");
+  }else showPopup("Invalid or Used ❌");
 }
 
-function scrollToCart(){
-  document.getElementById("cart").scrollIntoView({behavior:"smooth"});
+// ---------------- Search with Suggestions ----------------
+function searchProducts(e){
+  let val=document.getElementById("search").value.toLowerCase();
+  const sug=document.getElementById("suggestions");
+
+  if(!val){
+    sug.style.display="none";
+    renderProducts(products);
+    return;
+  }
+
+  let filtered=products.filter(p=>p.name.toLowerCase().includes(val));
+  renderProducts(filtered);
+
+  sug.innerHTML="";
+  filtered.forEach(p=>{
+    let div=document.createElement("div");
+    div.innerText=p.name;
+    div.onclick=()=>{
+      document.getElementById("search").value=p.name;
+      sug.style.display="none";
+      renderProducts([p]);
+      document.getElementById("shop").scrollIntoView({behavior:"smooth"});
+    };
+    sug.appendChild(div);
+  });
+  sug.style.display=filtered.length?"block":"none";
+
+  if(e && e.key==="Enter"){
+    sug.style.display="none";
+    document.getElementById("shop").scrollIntoView({behavior:"smooth"});
+  }
 }
 
-function checkoutCart(){popup("Checkout coming soon 🚀")}
-function buyNow(n,p){popup("Buying "+n+" for ₹"+p)}
+// ---------------- Open Product ----------------
+function openProduct(id){window.location.href="product.html?product="+id;}
+
+// ---------------- Scroll to Cart ----------------
+function scrollToCart(){document.getElementById("cart").scrollIntoView({behavior:"smooth"});}
+
+// ---------------- Popup ----------------
+function showPopup(msg){
+  const popup=document.getElementById("popup");
+  popup.textContent=msg;
+  popup.classList.add("show");
+  setTimeout(()=>popup.classList.remove("show"),2000);
+}
+
+// Init
+renderCart(); updateCartCount();
 </script>
 
 </body>
