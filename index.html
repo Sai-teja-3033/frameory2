@@ -2,165 +2,166 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>FRAMEORY | Premium Photo Frames</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FRAMEORY</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-html,body{overflow-x:hidden;scroll-behavior:smooth;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
 :root{
   --brown:#5a3e2b;
   --light-brown:#8b5e3c;
   --cream:#f5efe6;
 }
-body{background:var(--cream);color:#2c1c12;}
+body{background:var(--cream);color:#2c1c12}
 
 header{
   background:var(--brown);
   color:white;
-  padding:15px 40px;
+  padding:15px 30px;
   display:flex;
   justify-content:space-between;
   align-items:center;
   flex-wrap:wrap;
 }
-header h1{letter-spacing:2px;}
+header h1{letter-spacing:2px}
+
 .header-right{
   display:flex;
-  align-items:center;
   gap:10px;
-}
-.header-right input{
-  padding:10px 16px;
-  border-radius:25px;
-  border:none;
-  outline:none;
-  width:220px;
-}
-.cart-btn{
-  position:relative;
-  background:var(--light-brown);
-  border:none;
-  color:white;
-  padding:10px 22px;
-  border-radius:25px;
-  cursor:pointer;
-  white-space:nowrap;
-}
-.cart-count{
-  position:absolute;
-  top:-6px;
-  right:-6px;
-  background:#ff3b3b;
-  color:white;
-  border-radius:50%;
-  padding:2px 7px;
-  font-size:12px;
+  align-items:center;
 }
 
+.header-right input{
+  padding:10px 15px;
+  border-radius:25px;
+  border:none;
+  width:220px;
+}
+
+.cart-btn{
+  background:var(--light-brown);
+  color:white;
+  border:none;
+  padding:10px 20px;
+  border-radius:25px;
+  cursor:pointer;
+}
+
+/* HERO with IMAGE */
 .hero{
   min-height:85vh;
   display:flex;
-  flex-direction:column;
   justify-content:center;
   align-items:center;
+  flex-direction:column;
   text-align:center;
-  background:linear-gradient(120deg,#6b4226,#3e2617);
   color:white;
+  background:url("banner.jpg") center/cover no-repeat;
+  position:relative;
   padding:20px;
 }
-.hero h2{font-size:clamp(2rem,5vw,3rem);}
-.hero p{margin:15px 0;color:#f0e6dc}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+}
+.hero *{position:relative;z-index:2}
+
+.hero h2{font-size:3rem}
+.hero p{margin:15px 0}
 .hero a{
-  background:#d4b59a;color:#3e2617;
-  padding:14px 32px;border-radius:30px;
-  text-decoration:none;font-weight:500;
+  background:#d4b59a;
+  color:#3e2617;
+  padding:14px 30px;
+  border-radius:30px;
+  text-decoration:none;
 }
 
+/* PRODUCTS */
 .products{
   padding:60px 40px;
   display:grid;
-  gap:20px;
+  gap:25px;
   grid-template-columns:repeat(4,1fr);
 }
-@media(max-width:1024px){.products{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:1024px){
+  .products{grid-template-columns:repeat(3,1fr);}
+}
 @media(max-width:600px){
-  .products{grid-template-columns:repeat(2,1fr);padding:15px 10px;gap:10px;}
-  header{flex-direction:column;align-items:center;}
-  .header-right{width:100%;justify-content:center;margin-top:10px;flex-wrap:nowrap;}
-  .header-right input{width:60%;}
-  .cart-btn{margin-left:10px;}
+  header{padding:15px}
+  .header-right{width:100%;justify-content:center;margin-top:10px}
+  .header-right input{width:65%}
+  .products{grid-template-columns:repeat(2,1fr);gap:12px;padding:25px 12px}
 }
 
 .card{
-  background:white;border-radius:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.12);
-  transition:.3s;display:flex;flex-direction:column;
-  padding:15px;cursor:pointer;
-}
-.card:hover{transform:translateY(-6px);}
-.card img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:15px;margin-bottom:15px;}
-.card h3{margin-bottom:5px;}
-.card p{margin-bottom:10px;}
-.card button{
-  padding:12px;border:none;border-radius:25px;
-  background:var(--brown);color:white;cursor:pointer;margin-bottom:6px;
-}
-
-.cart{
-  margin:40px auto;padding:40px;
-  background:white;border-radius:20px;
-  box-shadow:0 15px 40px rgba(0,0,0,0.15);
-  max-width:900px;
-}
-.cart-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;flex-wrap:wrap;}
-.qty-box{display:flex;gap:6px;margin-top:10px;}
-.qty-box button{padding:4px 10px;border:none;border-radius:10px;background:var(--brown);color:white;cursor:pointer;}
-.remove-btn{background:#b33a3a;}
-.checkout-btn{
-  margin-top:20px;padding:14px 30px;border:none;border-radius:30px;
-  background:var(--brown);color:white;cursor:pointer;
-}
-
-.coupon-box{
-  margin-top:15px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.coupon-box input{
-  padding:10px;
+  background:white;
   border-radius:20px;
-  border:1px solid #ccc;
-  outline:none;
+  box-shadow:0 8px 20px rgba(0,0,0,0.12);
+  padding:12px;
+  display:flex;
+  flex-direction:column;
 }
-.coupon-box button{
-  padding:10px 22px;
-  border:none;border-radius:20px;
-  background:var(--light-brown);color:white;cursor:pointer;
+.card img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  border-radius:12px;
+}
+.card h3{margin:8px 0 4px}
+.card p{margin-bottom:10px}
+.card button{
+  margin-top:auto;
+  padding:10px;
+  border:none;
+  border-radius:25px;
+  background:var(--brown);
+  color:white;
+  cursor:pointer;
 }
 
-footer{background:var(--brown);color:#e8dccc;text-align:center;padding:25px;}
+/* CART */
+.cart{
+  margin:50px auto;
+  padding:40px;
+  max-width:900px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.15);
+}
+.cart h2{margin-bottom:15px}
+.cart-item{display:flex;justify-content:space-between;margin-bottom:8px}
+.cart input{padding:10px;width:200px;border-radius:20px;border:1px solid #ccc}
+.cart button{padding:10px 20px;border:none;border-radius:25px;background:var(--brown);color:white;cursor:pointer}
+.total{margin-top:15px;font-size:1.2rem}
 
+/* POPUP */
 #popup{
-  position:fixed;top:20px;left:50%;
-  transform:translateX(-50%) translateY(-50px);
-  background:#d4b59a;color:#3e2617;
-  padding:10px 20px;border-radius:20px;
-  box-shadow:0 5px 20px rgba(0,0,0,.2);
-  opacity:0;pointer-events:none;transition:.4s;white-space:nowrap;
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%) translateY(-30px);
+  background:#d4b59a;
+  color:#3e2617;
+  padding:12px 25px;
+  border-radius:20px;
+  opacity:0;
+  transition:0.4s;
+  z-index:999;
 }
-#popup.show{transform:translateX(-50%) translateY(0);opacity:1;}
+#popup.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
+
 <body>
 
 <header>
   <h1>FRAMEORY</h1>
   <div class="header-right">
-    <input type="text" id="search" placeholder="Search frames..." onkeyup="searchProducts(event)">
-    <button class="cart-btn" onclick="scrollToCart()">Cart 🛒 <span class="cart-count" id="cartCount">0</span></button>
+    <input type="text" id="search" placeholder="Search frames..." onkeydown="if(event.key==='Enter'){document.getElementById('shop').scrollIntoView({behavior:'smooth'})}">
+    <button class="cart-btn" onclick="scrollToCart()">Cart 🛒</button>
   </div>
 </header>
 
@@ -170,80 +171,54 @@ footer{background:var(--brown);color:#e8dccc;text-align:center;padding:25px;}
   <a href="#shop">Explore Collection</a>
 </section>
 
-<section class="products" id="shop"></section>
+<section class="products" id="shop">
+  <div class="card"><img src="https://i.postimg.cc/abcdefg/frame1.jpg"><h3>Classic Frame</h3><p>₹400</p><button onclick="addToCart('Classic Frame',400)">Add to Cart</button></div>
+  <div class="card"><img src="https://i.postimg.cc/abcdefg/frame2.jpg"><h3>Walnut Frame</h3><p>₹550</p><button onclick="addToCart('Walnut Frame',550)">Add to Cart</button></div>
+  <div class="card"><img src="https://i.postimg.cc/abcdefg/frame3.jpg"><h3>Vintage Frame</h3><p>₹750</p><button onclick="addToCart('Vintage Frame',750)">Add to Cart</button></div>
+  <div class="card"><img src="https://i.postimg.cc/abcdefg/frame4.jpg"><h3>Modern Frame</h3><p>₹500</p><button onclick="addToCart('Modern Frame',500)">Add to Cart</button></div>
+</section>
 
 <section class="cart" id="cart">
   <h2>Your Cart</h2>
   <div id="cartItems"></div>
-
-  <div class="coupon-box">
-    <input type="text" id="coupon" placeholder="Enter Coupon Code">
-    <button onclick="applyCoupon()">Apply</button>
-  </div>
-
-  <p><strong>Total: ₹<span id="total">0</span></strong></p>
-  <button class="checkout-btn" onclick="checkoutCart()">Checkout</button>
+  <input type="text" id="coupon" placeholder="Coupon: FRAMEORY10">
+  <button onclick="applyCoupon()">Apply</button>
+  <p class="total">Total: ₹<span id="total">0</span></p>
 </section>
 
-<footer>© 2026 FRAMEORY — Crafted With Elegance 🤎</footer>
-
-<div id="popup"></div>
+<div id="popup">Added to cart ✔</div>
 
 <script>
-const products=[
-  {name:"Classic Wooden Frame",price:400,img:"https://images.unsplash.com/photo-1589998059171-988d887df646"},
-  {name:"Dark Walnut Frame",price:550,img:"https://images.unsplash.com/photo-1618221195710-dd6b41faaea6"},
-  {name:"Luxury Vintage Frame",price:750,img:"https://images.unsplash.com/photo-1523413651479-597eb2da0ad6"},
-  {name:"Modern Minimal Frame",price:500,img:"https://images.unsplash.com/photo-1524758631624-e2822e304c36"}
-];
+let cart=[],total=0,discount=false;
 
-const shop=document.getElementById("shop");
-products.forEach(p=>{
-  shop.innerHTML+=`
-  <div class="card">
-    <img src="${p.img}">
-    <h3>${p.name}</h3>
-    <p>₹${p.price}</p>
-    <button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
-  </div>`;
-});
-
-let cart=[],discountUsed=false;
-
-function renderCart(){
-  let total=0,box=document.getElementById("cartItems");box.innerHTML="";
-  cart.forEach((i,idx)=>{
-    total+=i.price*i.qty;
-    box.innerHTML+=`<div class="cart-item">${i.name} x ${i.qty} <b>₹${i.price*i.qty}</b></div>`;
-  });
-  document.getElementById("total").innerText=total;
+function addToCart(n,p){
+  cart.push({n,p}); total+=p; render();
+  popup("Added to cart ✔");
 }
 
-function addToCart(name,price){
-  let item=cart.find(i=>i.name===name);
-  if(item)item.qty++; else cart.push({name,price,qty:1});
-  renderCart(); showPopup("Added to Cart 🛒");
+function render(){
+  let box=document.getElementById("cartItems");
+  box.innerHTML="";
+  cart.forEach(i=>box.innerHTML+=`<div class="cart-item"><span>${i.n}</span><span>₹${i.p}</span></div>`);
+  document.getElementById("total").innerText=total.toFixed(2);
+}
+
+function popup(msg){
+  let p=document.getElementById("popup");
+  p.textContent=msg; p.classList.add("show");
+  setTimeout(()=>p.classList.remove("show"),1800);
 }
 
 function applyCoupon(){
-  const code=document.getElementById("coupon").value.trim();
-  if(code==="FRAMEORY10" && !discountUsed){
-    let total=Number(document.getElementById("total").innerText);
-    document.getElementById("total").innerText=(total*0.9).toFixed(0);
-    discountUsed=true;
-    showPopup("Coupon Applied 🎉");
-  }else{
-    showPopup("Invalid / Used Coupon ❌");
-  }
+  let code=document.getElementById("coupon").value.trim();
+  if(code==="FRAMEORY10" && !discount){
+    total*=0.9; discount=true; render(); popup("Coupon Applied 🎉");
+  }else popup("Invalid / Used ❌");
 }
 
-function showPopup(msg){
-  const p=document.getElementById("popup");
-  p.textContent=msg;p.classList.add("show");
-  setTimeout(()=>p.classList.remove("show"),2000);
+function scrollToCart(){
+  document.getElementById("cart").scrollIntoView({behavior:"smooth"});
 }
-function scrollToCart(){document.getElementById("cart").scrollIntoView({behavior:"smooth"});}
-function checkoutCart(){showPopup("Checkout Coming Soon 💳");}
 </script>
 
 </body>
