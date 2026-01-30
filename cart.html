@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart | FRAMEORY</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Poppins;background:#f5efe6}
+header {
+  background:#5a3e2b;
+  color:white;
+  padding:15px 40px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position: relative;
+}
+header h1 {
+  letter-spacing:2px;
+  cursor:pointer;
+  text-align:center;
+  margin:0;
+}
+header button {
+  position:absolute;
+  right:40px;
+  background:#d4b59a;
+  color:#3e2617;
+  padding:8px 16px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:500;
+}
+header button:hover {background:#bfa07c;}
+.container{max-width:1100px;margin:auto;padding:40px}
+table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden}
+th, td{padding:15px;text-align:left;border-bottom:1px solid #ddd}
+th{background:#f0e5db}
+button.cart-btn{padding:6px 12px;border:none;border-radius:6px;background:#5a3e2b;color:white;cursor:pointer}
+button.cart-btn:hover{background:#8b5e3c}
+.quantity-btn{padding:4px 10px;margin:0 4px;border:none;border-radius:6px;background:#d4b59a;color:#3e2617;cursor:pointer}
+.quantity-btn:hover{background:#bfa07c;}
+.total{font-weight:700;font-size:1.2rem;text-align:right;margin-top:20px}
+.empty{background:white;padding:20px;border-radius:12px;text-align:center;font-size:1.1rem}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 onclick="window.location.href='index.html'">FRAMEORY</h1>
+</header>
+
+<div class="container">
+  <h2>Your Cart</h2>
+  <div id="cartContainer"></div>
+</div>
+
+<script>
+// Load cart from localStorage
+let cart = JSON.parse(localStorage.getItem("cart")||"[]");
+
+// Save cart function
+function saveCart(){ localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); }
+
+// Render cart table
+function renderCart(){
+  const container = document.getElementById("cartContainer");
+  if(cart.length===0){
+    container.innerHTML='<div class="empty">Your cart is empty! <a href="index.html">Go shopping</a></div>';
+    return;
+  }
+
+  let tableHTML = `<table>
+    <tr>
+      <th>Product</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Subtotal</th>
+      <th>Action</th>
+    </tr>`;
+
+  let total = 0;
+  cart.forEach((item,i)=>{
+    let subtotal = item.basePrice * item.qty;
+    total += subtotal;
+    tableHTML += `
+      <tr>
+        <td>${item.name}</td>
+        <td>₹${item.basePrice}</td>
+        <td>
+          <button class="quantity-btn" onclick="changeQty(${i},-1)">-</button>
+          ${item.qty}
+          <button class="quantity-btn" onclick="changeQty(${i},1)">+</button>
+        </td>
+        <td>₹${subtotal}</td>
+        <td><button class="cart-btn" onclick="removeItem(${i})">Remove</button></td>
+      </tr>
+    `;
+  });
+
+  tableHTML += `</table>`;
+  tableHTML += `<div class="total">Total: ₹${total}</div>`;
+
+  container.innerHTML = tableHTML;
+}
+
+// Change quantity
+function changeQty(index, delta){
+  cart[index].qty += delta;
+  if(cart[index].qty < 1) cart.splice(index,1);
+  saveCart();
+}
+
+// Remove item
+function removeItem(index){
+  cart.splice(index,1);
+  saveCart();
+}
+
+// Initial render
+renderCart();
+
+</script>
+
+</body>
+</html>
