@@ -26,6 +26,47 @@ button{
   margin-right:10px;
   margin-bottom:10px;
 }
+header {
+  background:#5a3e2b;
+  color:white;
+  padding:15px 40px;
+  display:flex;
+  justify-content:center;  /* centers FRAMEORY */
+  align-items:center;
+  position: relative;      /* for absolute positioning of cart */
+}
+
+header h1 {
+  letter-spacing:2px;
+  cursor:pointer;
+  text-align:center;
+  margin:0;
+}
+
+header button {
+  position: absolute;       /* position cart independently */
+  right: 40px;              /* distance from right edge */
+  background:#d4b59a;
+  color:#3e2617;
+  padding:8px 16px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:500;
+}
+
+header button:hover {
+  background:#bfa07c;
+}
+
+
+@media(max-width:600px){
+  header{
+    padding:15px 20px;
+    justify-content:center;
+  }
+}
+
 button:hover{background:#8b5e3c}
 .review{background:white;padding:15px;border-radius:12px;margin-top:15px}
 #popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-50px);background:#d4b59a;color:#3e2617;padding:15px 30px;border-radius:20px;box-shadow:0 5px 20px rgba(0,0,0,0.2);opacity:0;pointer-events:none;transition:transform 0.5s ease, opacity 0.5s ease;font-weight:500;z-index:9999;}
@@ -33,9 +74,26 @@ button:hover{background:#8b5e3c}
 @media(max-width:768px){
   .product{grid-template-columns:1fr}
 }
+.main-img{
+  user-select:none;          /* prevents text selection while swiping */
+  -webkit-user-drag:none;    /* prevents dragging the image accidentally */
+}
+@media(max-width:600px){
+  header button {
+    right: 20px; /* match header padding */
+    padding:6px 12px;
+  }
+}
+
 </style>
 </head>
 <body>
+ <header>
+  <h1 onclick="window.location.href='index.html'">FRAMEORY</h1>
+  <button id="headerCart" onclick="goToCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
+</header>
+
+
 
 <div class="container">
   <!-- GitHub-ready back button -->
@@ -46,6 +104,8 @@ button:hover{background:#8b5e3c}
 <div id="popup"></div>
 
 <script>
+    
+
 // ---------------- Product Database ----------------
 const products = {
   "classic-wooden-frame":{
@@ -82,6 +142,9 @@ const p = products[id];
 if(!p){ document.getElementById("productBox").innerHTML="<p>Product not found!</p>"; }
 
 // Render product
+let images = p.images;       // global array of product images
+let currentIndex = 0;        // tracks current main image
+let startX = 0;              // for swipe detection
 let gallery = p.images.map((img,i)=>`<img src="${img}" class="${i===0?'active':''}" onclick="setMain(this)">`).join("");
 document.getElementById("productBox").innerHTML = `
   <div>
@@ -93,18 +156,58 @@ document.getElementById("productBox").innerHTML = `
     <p class="price">₹${p.price}</p>
     <p>${p.desc}</p>
     <button onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
-    <button onclick="buyNow('${p.name}',${p.price})">Buy Now</button>
     <h3>Reviews</h3>
     ${p.reviews.map(r=>`<div class="review">${r}</div>`).join("")}
   </div>
 `;
 
 // ---------------- Functions ----------------
-function setMain(img){
-  document.getElementById("mainImg").src = img.src;
-  document.querySelectorAll(".thumbs img").forEach(i=>i.classList.remove("active"));
-  img.classList.add("active");
+const mainImg = document.getElementById("mainImg");
+
+// Thumbnail click already calls setMain(img) (no change needed)
+
+// Touch/swipe events
+mainImg.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+mainImg.addEventListener("touchend", e => {
+  let endX = e.changedTouches[0].clientX;
+  let diff = startX - endX;
+
+  if(Math.abs(diff) > 50){ // swipe threshold
+    if(diff > 0){
+      nextImage();
+    } else {
+      prevImage();
+    }
+  }
+});
+
+function nextImage(){
+  currentIndex = (currentIndex + 1) % images.length;
+  updateImage();
 }
+
+function prevImage(){
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  updateImage();
+}
+function setMain(img){
+  const thumbs = document.querySelectorAll(".thumbs img"); // get all thumbnail images
+  currentIndex = Array.from(thumbs).indexOf(img);         // find index of clicked thumbnail
+  updateImage();                                          // update the main image
+}
+
+function updateImage(){
+  mainImg.src = images[currentIndex];                     // update main image
+  document.querySelectorAll(".thumbs img").forEach((img,i)=>{
+    img.classList.toggle("active", i === currentIndex);  // highlight active thumbnail
+  });
+}
+
+
+
 
 let cart = JSON.parse(localStorage.getItem("cart")||"[]");
 function saveCart(){ localStorage.setItem("cart",JSON.stringify(cart)); }
@@ -115,20 +218,40 @@ function showPopup(message){
   popup.classList.add("show");
   setTimeout(()=>popup.classList.remove("show"),2000);
 }
+// Update cart count in header
+function updateHeaderCart() {
+  const count = cart.reduce((sum, i) => sum + i.qty, 0);
+  document.getElementById("cartCount").textContent = count;
+}
 
+// Call whenever page loads or cart changes
+updateHeaderCart();
+
+// Go to cart page
+function goToCart() {
+  window.location.href = 'cart.html'; // create cart.html later
+}
+
+// Modify addToCart to also update header count
 function addToCart(name, price){
-  let item = cart.find(i=>i.name===name);
-  if(item){item.qty++}else{cart.push({name,price,qty:1})}
+  let item = cart.find(i=>i.name === name);
+
+  if(item){
+    item.qty++;
+  } else {
+    cart.push({
+      name,
+      basePrice: price,
+      qty: 1
+    });
+  }
+
   saveCart();
+  updateHeaderCart();   // <-- update count
   showPopup("Added to Cart 🛒");
 }
 
-function buyNow(name, price){
-  addToCart(name, price);
-  showPopup("Proceeding to payment 💳");
-}
 </script>
 
 </body>
 </html>
-
