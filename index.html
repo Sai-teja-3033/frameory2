@@ -57,10 +57,17 @@ header h1{letter-spacing:2px;}
 .search-suggestions div{
   padding:10px 16px;
   cursor:pointer;
+  color:#000;              /* 🔥 make text black */
+  font-weight:500;
+}
+gestions div:hover{
+  background:#f2e6d8;
 }
 .search-suggestions div:hover{
   background:#f2e6d8;
+  color:#3e2617;
 }
+
 
 .cart-btn{
   position:relative;
@@ -295,29 +302,42 @@ function renderProducts(list){
   const box=document.getElementById("shop"); box.innerHTML="";
   list.forEach(p=>{
     box.innerHTML += `
-      <div class="card" onclick="openProduct('${p.id}')">
-        <img src="${p.img}" alt="${p.name}">
-        <h3>${p.name}</h3>
-        <p>₹${p.price}</p>
-        <button onclick="event.stopPropagation(); addToCart('${p.name}',${p.price})">Add to Cart</button>
-        <button onclick="event.stopPropagation(); buyNow('${p.name}',${p.price})">Buy Now</button>
-      </div>
-    `;
+  <div class="card" onclick="openProduct('${p.id}')">
+    <img src="${p.img}" alt="${p.name}">
+    <h3>${p.name}</h3>
+    <p>₹${p.price}</p>
+    <button onclick="event.stopPropagation(); addToCart('${p.name}',${p.price})">
+      Add to Cart
+    </button>
+  </div>
+`;
   });
 }
 renderProducts(products);
 
 // ---------------- Cart ----------------
-let cart=JSON.parse(localStorage.getItem("cart")||"[]");
-let discountUsed=false;
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let discountUsed = JSON.parse(localStorage.getItem("discountUsed") || "false");
 function saveCart(){localStorage.setItem("cart",JSON.stringify(cart));}
 function updateCartCount(){document.getElementById("cartCount").innerText = cart.reduce((sum,i)=>sum+i.qty,0);}
 function renderCart(){
-  const box=document.getElementById("cartItems"); box.innerHTML="";
-  let total=0;
+  const box = document.getElementById("cartItems");
+  box.innerHTML = "";
+
+  if(cart.length === 0){
+    box.innerHTML = "<p>Your cart is empty 🛒</p>";
+    document.getElementById("total").innerText = 0;
+    return;
+  }
+
+  let total = 0;
+  let discountRate = discountUsed ? 0.10 : 0;
+
   cart.forEach((i,idx)=>{
-    total+=i.price*i.qty;
-    box.innerHTML+=`
+    let itemTotal = i.basePrice * i.qty * (1 - discountRate);
+    total += itemTotal;
+
+    box.innerHTML += `
       <div class="cart-item">
         <span>${i.name}</span>
         <div class="qty-box">
@@ -326,32 +346,49 @@ function renderCart(){
           <button onclick="changeQty(${idx},1)">+</button>
           <button class="remove-btn" onclick="removeItem(${idx})">Remove</button>
         </div>
-        <span>₹${i.price*i.qty}</span>
+        <span>₹${Math.round(itemTotal)}</span>
       </div>
     `;
   });
-  document.getElementById("total").innerText=total;
+
+  document.getElementById("total").innerText = Math.round(total);
 }
 
+
 function addToCart(name,price){
-  let item=cart.find(i=>i.name===name);
-  if(item){item.qty++}else{cart.push({name,price,qty:1})}
-  saveCart(); renderCart(); updateCartCount(); showPopup("Added to Cart 🛒");
+  let item = cart.find(i=>i.name===name);
+  if(item){
+    item.qty++;
+  } else {
+    cart.push({
+      name,
+      basePrice: price,
+      qty: 1
+    });
+  }
+  saveCart();
+  renderCart();
+  updateCartCount();
+  showPopup("Added to Cart 🛒");
 }
-function buyNow(name,price){addToCart(name,price); showPopup("Proceeding to payment 💳");}
 function changeQty(idx,delta){cart[idx].qty+=delta;if(cart[idx].qty<=0) cart.splice(idx,1); saveCart(); renderCart(); updateCartCount();}
 function removeItem(idx){cart.splice(idx,1); saveCart(); renderCart(); updateCartCount();}
 function checkoutCart(){if(cart.length===0){showPopup("Cart is empty ❌"); return;} showPopup("Checkout not implemented 💳");}
 
 // ---------------- Coupon ----------------
 function applyCoupon(){
-  let code=document.getElementById("coupon").value.trim();
-  if(code==="FRAMEORY10" && !discountUsed){
-    cart.forEach(i=>i.price=i.price*0.9);
-    discountUsed=true;
-    saveCart(); renderCart(); showPopup("Coupon Applied 🎉");
-  }else showPopup("Invalid or Used ❌");
+  let code = document.getElementById("coupon").value.trim();
+
+  if(code === "FRAMEORY10" && !discountUsed){
+    discountUsed = true;
+    localStorage.setItem("discountUsed","true");
+    renderCart();
+    showPopup("Coupon Applied 🎉");
+  } else {
+    showPopup("Invalid or Used ❌");
+  }
 }
+
 
 // ---------------- Search with Suggestions ----------------
 function searchProducts(e){
@@ -407,4 +444,3 @@ renderCart(); updateCartCount();
 
 </body>
 </html>
-
